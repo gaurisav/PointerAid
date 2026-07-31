@@ -1,16 +1,17 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 export const ForecastContext = createContext();
 
 export function ForecastProvider({ children }) {
-  const [student, setStudent] = useState({
+  const [student, setStudent] = useLocalStorage("student", {
     currentCGPA: 8.42,
-    targetCGPA: 9.0,
+    targetCGPA: 9,
     completedCredits: 92,
     semesterCredits: 24,
   });
 
-  const [subjects, setSubjects] = useState([]);
+  const [subjects, setSubjects] = useLocalStorage("subjects", []);
 
   return (
     <ForecastContext.Provider
