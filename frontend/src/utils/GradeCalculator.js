@@ -23,3 +23,13 @@ export function calculateSGPA(subjects) {
   return (totalPoints / totalCredits).toFixed(2);
 }
 
+export function marksToGrade(marks) {
+  if (marks >= 90) return "O";
+  if (marks >= 80) return "A+";
+  if (marks >= 70) return "A";
+  if (marks >= 60) return "B+";
+  if (marks >= 50) return "B";
+  if (marks >= 45) return "C";
+  if (marks >= 40) return "P";
+  return "F";
+}
