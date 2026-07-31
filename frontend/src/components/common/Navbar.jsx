@@ -2,7 +2,6 @@ import { useContext } from "react";
 import {
   AppBar,
   Toolbar,
-  Typography,
   Avatar,
   Box,
   IconButton,
@@ -11,6 +10,7 @@ import {
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 
+import Logo from "./Logo";
 import { ColorModeContext } from "../../context/ThemeContext";
 
 function Navbar() {
@@ -27,9 +27,9 @@ function Navbar() {
     >
       <Toolbar>
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            PointerAid
-          </Typography>
+          <Box sx={{ flexGrow: 1 }}>
+            <Logo />
+          </Box>
 
           <>
             <IconButton onClick={toggleColorMode}>

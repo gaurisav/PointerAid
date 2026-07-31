@@ -16,9 +16,10 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
   Box,
 } from "@mui/material";
+
+import Logo from "./Logo";
 
 const drawerWidth = 240;
 
@@ -65,13 +66,7 @@ function Sidebar() {
         >
             <Box>
                 <Toolbar>
-                    <Typography
-                        variant="h5"
-                        color="primary"
-                        fontWeight={700}
-                    >
-                        PointerAid
-                    </Typography>
+                    <Logo />
                 </Toolbar>
 
                 <List>
