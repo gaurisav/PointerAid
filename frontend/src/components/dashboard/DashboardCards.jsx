@@ -1,18 +1,22 @@
-import { useContext } from "react";
 import { Grid } from "@mui/material";
+import { useContext } from "react";
+import { ForecastContext } from "../../context/ForecastContext";
+import { calculateRequiredSGPA } from "../../utils/cgpaCalculator";
+import { calculateSGPA } from "../../utils/gradeCalculator";
 import KPICard from "./KPICard";
 
-import { ForecastContext } from "../../context/ForecastContext";
-
 function DashboardCards() {
-  const { student } = useContext(ForecastContext);
+  const { student, subjects } = useContext(ForecastContext);
+
+  const predictedSGPA = calculateSGPA(subjects);
+  const requiredSGPA = calculateRequiredSGPA(student);
 
   return (
     <Grid container spacing={3} sx={{ mb: 4 }}>
       <Grid size={{ xs: 12, md: 3 }}>
         <KPICard
           title="Current CGPA"
-          value={student.currentCGPA}
+          value={student.currentCGPA || "--"}
           color="primary.main"
         />
       </Grid>
@@ -20,7 +24,7 @@ function DashboardCards() {
       <Grid size={{ xs: 12, md: 3 }}>
         <KPICard
           title="Target CGPA"
-          value={student.targetCGPA}
+          value={student.targetCGPA || "--"}
           color="success.main"
         />
       </Grid>
@@ -28,15 +32,15 @@ function DashboardCards() {
       <Grid size={{ xs: 12, md: 3 }}>
         <KPICard
           title="Required SGPA"
-          value={student.completedCredits}
+          value={requiredSGPA || "--"}
           color="warning.main"
         />
       </Grid>
 
       <Grid size={{ xs: 12, md: 3 }}>
         <KPICard
-          title="Forecasts"
-          value={student.semesterCredits}
+          title="Predicted SGPA"
+          value={predictedSGPA || "--"}
           color="secondary.main"
         />
       </Grid>

@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Container } from "@mui/material";
 
 import DashboardHeader from "../components/dashboard/DashboardHeader";
@@ -6,7 +7,11 @@ import CGPAProjectionChart from "../components/charts/CGPAProjectionChart";
 import QuickActions from "../components/dashboard/QuickActions";
 import RecentForecasts from "../components/dashboard/RecentForecasts";
 
+import { ForecastContext } from "../context/ForecastContext";
+
 function Dashboard() {
+  const { student } = useContext(ForecastContext);
+
   return (
     <Container maxWidth="xl">
       <DashboardHeader />
@@ -14,8 +19,8 @@ function Dashboard() {
       <DashboardCards />
 
       <CGPAProjectionChart
-        currentCGPA={8.42}
-        targetCGPA={9.0}
+        currentCGPA={student.currentCGPA}
+        targetCGPA={student.targetCGPA}
       />
 
       <QuickActions />

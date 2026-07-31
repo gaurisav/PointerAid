@@ -2,21 +2,20 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import { Toaster } from "react-hot-toast";
 
-import theme from "./theme/theme";
 import { ForecastProvider } from "./context/ForecastContext";
+import { ColorModeProvider } from "./context/ThemeContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-
+    <ColorModeProvider>
       <ForecastProvider>
+        <Toaster position="top-right" />
+
         <App />
       </ForecastProvider>
-
-    </ThemeProvider>
+    </ColorModeProvider>
   </React.StrictMode>
 );
+
