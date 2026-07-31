@@ -168,13 +168,24 @@ function ForecastForm() {
           </TableBody>
         </Table>
 
-        <Button
-          variant="outlined"
-          onClick={handleAddSubject}
-          sx={{ mt: 2 }}
-        >
-          + Add Subject
-        </Button>
+        <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={handleAddSubject}
+          >
+            + Add Subject
+          </Button>
+
+          <Button
+            color="error"
+            variant="outlined"
+            onClick={() => {
+              setSubjects([]);
+            }}
+          >
+            Reset Subjects
+          </Button>
+        </Stack>
       </Paper>
 
       {/* Predicted SGPA */}
