@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Paper,
   Typography,
@@ -6,84 +7,115 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Chip,
 } from "@mui/material";
-import { useContext } from "react";
+
 import { ForecastContext } from "../../context/ForecastContext";
+import {
+  marksToGrade,
+  marksToGradePoint,
+} from "../../utils/gradeCalculator";
+
+function getStatus(gradePoint) {
+  if (gradePoint >= 9)
+    return {
+      label: "Excellent",
+      color: "success",
+    };
+
+  if (gradePoint >= 8)
+    return {
+      label: "Very Good",
+      color: "primary",
+    };
+
+  if (gradePoint >= 7)
+    return {
+      label: "Good",
+      color: "info",
+    };
+
+  if (gradePoint >= 6)
+    return {
+      label: "Average",
+      color: "warning",
+    };
+
+  return {
+    label: "Needs Improvement",
+    color: "error",
+  };
+}
 
 function PerformanceTable() {
   const { subjects } = useContext(ForecastContext);
 
-  const rows = (subjects || []).map((subject) => {
-    const current = Number(subject.current) || 0;
-    const target = Number(subject.target) || 0;
-    const credits = Number(subject.credits) || 0;
-    const requiredFinal = target - current;
-
-    let status = "-";
-    let statusColor = "text.secondary";
-
-    if (current && target) {
-      if (requiredFinal > 60) {
-        status = "Impossible";
-        statusColor = "error";
-      } else if (requiredFinal <= 0) {
-        status = "Achieved";
-        statusColor = "success.main";
-      } else {
-        status = `${requiredFinal} / 60`;
-        statusColor = "primary";
-      }
-    }
-
-    return {
-      name: subject.name || "Untitled",
-      credits,
-      current,
-      target,
-      status,
-      statusColor,
-    };
-  });
-
-  const hasData = rows.length > 0;
-
   return (
-    <Paper sx={{ p: 3, mt: 4, borderRadius: 3 }}>
-      <Typography variant="h6" gutterBottom>
+    <Paper
+      sx={{
+        mt: 4,
+        p: 3,
+        borderRadius: 3,
+      }}
+    >
+      <Typography
+        variant="h6"
+        gutterBottom
+      >
         Subject Performance
       </Typography>
 
-      {hasData ? (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Subject</TableCell>
-              <TableCell>Credits</TableCell>
-              <TableCell>Current</TableCell>
-              <TableCell>Target</TableCell>
-              <TableCell>Required Final</TableCell>
-            </TableRow>
-          </TableHead>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Subject</TableCell>
+            <TableCell>Credits</TableCell>
+            <TableCell>Total Marks</TableCell>
+            <TableCell>Grade</TableCell>
+            <TableCell>Grade Point</TableCell>
+            <TableCell>Status</TableCell>
+          </TableRow>
+        </TableHead>
 
-          <TableBody>
-            {rows.map((row, index) => (
+        <TableBody>
+          {subjects.map((subject, index) => {
+            const marks = Number(subject.target) || 0;
+
+            const grade = marksToGrade(marks);
+
+            const gradePoint =
+              marksToGradePoint(marks);
+
+            const status =
+              getStatus(gradePoint);
+
+            return (
               <TableRow key={index}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.credits}</TableCell>
-                <TableCell>{row.current}</TableCell>
-                <TableCell>{row.target}</TableCell>
-                <TableCell sx={{ color: row.statusColor }}>
-                  {row.status}
+                <TableCell>
+                  {subject.name || "-"}
+                </TableCell>
+
+                <TableCell>
+                  {subject.credits || "-"}
+                </TableCell>
+
+                <TableCell>{marks}</TableCell>
+
+                <TableCell>{grade}</TableCell>
+
+                <TableCell>{gradePoint}</TableCell>
+
+                <TableCell>
+                  <Chip
+                    label={status.label}
+                    color={status.color}
+                  />
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      ) : (
-        <Typography color="text.secondary" sx={{ py: 6, textAlign: "center" }}>
-          No subjects yet. Add subjects in the Forecast page to see performance.
-        </Typography>
-      )}
+            );
+          })}
+        </TableBody>
+      </Table>
     </Paper>
   );
 }
