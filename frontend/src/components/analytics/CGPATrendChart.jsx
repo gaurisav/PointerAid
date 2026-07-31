@@ -1,22 +1,22 @@
-import { Paper, Typography, Box } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { useContext } from "react";
+import { ForecastContext } from "../../context/ForecastContext";
+
 import {
-  AreaChart,
-  Area,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  CartesianGrid,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  Legend,
 } from "recharts";
-import { ForecastContext } from "../../context/ForecastContext";
 
 function CGPATrendChart() {
   const { student } = useContext(ForecastContext);
 
-  const currentCGPA = Number(student.currentCGPA) || 0;
-  const targetCGPA = Number(student.targetCGPA) || 0;
+  const current = Number(student.currentCGPA) || 0;
+  const target = Number(student.targetCGPA) || 0;
 
   const semesters = [
     "Sem 1",
@@ -31,12 +31,12 @@ function CGPATrendChart() {
 
   const data = semesters.map((semester, index) => {
     const progress = (index + 1) / semesters.length;
-    const current = currentCGPA + progress * (targetCGPA - currentCGPA);
+    const currentCGPA = current + progress * (target - current);
 
     return {
       semester,
-      current: Number(current.toFixed(2)),
-      target: targetCGPA,
+      current: Number(currentCGPA.toFixed(2)),
+      target,
     };
   });
 
@@ -46,52 +46,44 @@ function CGPATrendChart() {
         CGPA Trend
       </Typography>
 
-      <Box sx={{ width: "100%", height: 320 }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={data}
-            margin={{
-              top: 8,
-              right: 24,
-              left: 0,
-              bottom: 0,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
+      <ResponsiveContainer width="100%" height={320}>
+        <LineChart
+          data={data}
+          margin={{
+            top: 8,
+            right: 24,
+            left: 0,
+            bottom: 0,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
 
-            <XAxis dataKey="semester" />
+          <XAxis dataKey="semester" />
 
-            <YAxis domain={[0, 10]} tickCount={6} />
+          <YAxis domain={[0, 10]} tickCount={6} />
 
-            <Tooltip />
+          <Tooltip />
 
-            <Legend />
+          <Line
+            type="monotone"
+            dataKey="current"
+            name="Current CGPA"
+            stroke="#2563EB"
+            strokeWidth={3}
+            dot={{ r: 4 }}
+          />
 
-            <Area
-              type="monotone"
-              dataKey="current"
-              name="Current CGPA"
-              stroke="#2563EB"
-              fill="#2563EB"
-              fillOpacity={0.15}
-              strokeWidth={3}
-              dot={{ r: 4 }}
-            />
-
-            <Area
-              type="monotone"
-              dataKey="target"
-              name="Target CGPA"
-              stroke="#14B8A6"
-              fill="#14B8A6"
-              fillOpacity={0.1}
-              strokeWidth={3}
-              strokeDasharray="5 5"
-              dot={{ r: 4 }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
-      </Box>
+          <Line
+            type="monotone"
+            dataKey="target"
+            name="Target CGPA"
+            stroke="#14B8A6"
+            strokeWidth={3}
+            strokeDasharray="5 5"
+            dot={{ r: 4 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </Paper>
   );
 }
